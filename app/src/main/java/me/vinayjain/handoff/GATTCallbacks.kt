@@ -1,6 +1,7 @@
 package me.vinayjain.handoff
 
 import android.bluetooth.*
+import android.util.Log
 
 class GATTCallbacks: BluetoothGattServerCallback() {
     override fun onDescriptorReadRequest(
@@ -46,6 +47,18 @@ class GATTCallbacks: BluetoothGattServerCallback() {
             offset,
             value
         )
+
+        if (device != null) {
+            Log.e("BLE", "Characteristics write request by ${device.address}")
+            if (characteristic != null) {
+                Log.e("BLE", String(characteristic?.value))
+            } else {
+                Log.e("BLE", "Characteristic is null")
+            }
+
+        } else {
+            Log.e("BLE", "Device is null when writing")
+        }
     }
 
     override fun onCharacteristicReadRequest(
@@ -55,7 +68,11 @@ class GATTCallbacks: BluetoothGattServerCallback() {
         characteristic: BluetoothGattCharacteristic?
     ) {
         super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-
+        if (device != null) {
+            Log.e("BLE", "Characteristics read request by ${device.address}")
+        } else {
+            Log.e("BLE", "Device is null when reading")
+        }
     }
 
     override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
