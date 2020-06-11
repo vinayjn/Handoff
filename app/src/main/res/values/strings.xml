@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Handoff</string>
+    <string name="service_uuid">48636DB5-4EAD-4D1F-A39E-7D90BD2AA940</string>
+    <string name="char_uuid">4923BF37-60F8-424F-ABC3-CC24AB17C601</string>
+</resources>
