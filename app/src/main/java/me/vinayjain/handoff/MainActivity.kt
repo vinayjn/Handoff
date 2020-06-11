@@ -23,12 +23,16 @@ class MainActivity : AppCompatActivity() {
 
     private var adCallback: AdCallback? = null
 
+    private var serverCallbacks: GATTCallbacks? = null
+
+    private var gattServer: BluetoothGattServer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         adCallback = AdCallback()
         setupGAP()
+        setupGATT()
     }
 
     private fun setupGAP() {
@@ -48,6 +52,27 @@ class MainActivity : AppCompatActivity() {
                 .addServiceUuid(parcelUuid)
                 .build()
         bleAdvertiser.startAdvertising(advertiseSettings, advertiseData, adCallback)
+    }
+
+    private fun setupGATT() {
+        serverCallbacks = GATTCallbacks()
+        val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+        gattServer = manager.openGattServer(this, serverCallbacks)
+
+        val service = BluetoothGattService(
+                UUID.fromString(getString(R.string.service_uuid)),
+                BluetoothGattService.SERVICE_TYPE_PRIMARY
+        )
+
+        val characteristic = BluetoothGattCharacteristic(
+                UUID.fromString(getString(R.string.char_uuid)),
+                BluetoothGattCharacteristic.PROPERTY_WRITE,
+                BluetoothGattCharacteristic.PERMISSION_WRITE
+        )
+        characteristic.value = "Hello".toByteArray()
+        service.addCharacteristic(characteristic)
+
+        gattServer!!.addService(service)
     }
 
 }
