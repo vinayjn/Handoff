@@ -4,6 +4,7 @@ import android.bluetooth.*
 import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
+import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.ParcelUuid
@@ -55,7 +56,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupGATT() {
-        serverCallbacks = GATTCallbacks()
+        val clipManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        serverCallbacks = GATTCallbacks(clipboardManager = clipManager)
         val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         gattServer = manager.openGattServer(this, serverCallbacks)
 

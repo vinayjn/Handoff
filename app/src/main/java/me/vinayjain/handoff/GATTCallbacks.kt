@@ -1,9 +1,13 @@
 package me.vinayjain.handoff
 
 import android.bluetooth.*
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.util.Log
 
-class GATTCallbacks: BluetoothGattServerCallback() {
+
+class GATTCallbacks(val clipboardManager: ClipboardManager): BluetoothGattServerCallback() {
+
     override fun onDescriptorReadRequest(
         device: BluetoothDevice?,
         requestId: Int,
@@ -49,9 +53,11 @@ class GATTCallbacks: BluetoothGattServerCallback() {
         )
 
         if (device != null) {
-            Log.e("BLE", "Characteristics write request by ${device.address}")
+            val str1 = value?.let { String(it) }
             if (characteristic != null) {
-                Log.e("BLE", String(characteristic?.value))
+                val clipData = ClipData.newPlainText("Copied Text", str1)
+                clipboardManager.setPrimaryClip(clipData)
+                Log.e("BLE", "Copied to clipboard")
             } else {
                 Log.e("BLE", "Characteristic is null")
             }
