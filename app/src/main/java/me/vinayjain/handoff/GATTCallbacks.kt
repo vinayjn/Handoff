@@ -55,9 +55,10 @@ class GATTCallbacks(val clipboardManager: ClipboardManager): BluetoothGattServer
         if (device != null) {
             val str1 = value?.let { String(it) }
             if (characteristic != null) {
+                Log.i("BLE", str1)
                 val clipData = ClipData.newPlainText("Copied Text", str1)
                 clipboardManager.setPrimaryClip(clipData)
-                Log.e("BLE", "Copied to clipboard")
+                Log.i("BLE", "Copied to clipboard")
             } else {
                 Log.e("BLE", "Characteristic is null")
             }
@@ -75,7 +76,7 @@ class GATTCallbacks(val clipboardManager: ClipboardManager): BluetoothGattServer
     ) {
         super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
         if (device != null) {
-            Log.e("BLE", "Characteristics read request by ${device.address}")
+            Log.i("BLE", "Characteristics read request by ${device.address}")
         } else {
             Log.e("BLE", "Device is null when reading")
         }
